@@ -39,39 +39,60 @@ public class Starou {
             }
             //List of all tasks
             else if (input.equals("list")) { //list of all tasks
-                if (tasks.isEmpty()) {
-                    printBox("There is no task yet!");
-                } else {
-                    String[] lines = new String[tasks.size()];
-                    for (int i = 0; i < tasks.size(); i++) {
-                        lines[i] = (i + 1) + ". " + tasks.get(i);
-                    }
-                    printBox(lines);
-                }
+                handleList(tasks);
             }
 
             //Mark/ Unmark
             else if (input.startsWith("mark ") || input.startsWith("unmark ")) {
-                boolean isMark = input.startsWith("mark ");
-                int index = Integer.parseInt(input.split("\\s+")[1]);
-                Task t = tasks.get(index - 1);
-
-                if(isMark) {
-                    t.mark();
-                    printBox("I've mark this task as done:", " " + t.toString());
-                } else {
-                    t.unmark();
-                    printBox("I've mark this task as not done yet:", " " + t.toString());
-                }
+                handleMarking(tasks, input);
             }
 
-            //Add new task to the list
+            else if (Parser.isAddCommand(input)) {
+                handleAdd(tasks, input);
+            }
+
+            //Keep old behavior
             else {
-                tasks.add(new Task(input));
+                Task t = new Todo(input);
+                tasks.add(t);
                 printBox("added: " + input);
             }
         }
 
         sc.close();
+    }
+
+    private static void handleList(ArrayList<Task> tasks) {
+        if(tasks.isEmpty()) {
+            printBox("There is no task.");
+        } else {
+            String[] lines = new String[tasks.size()];
+            for (int i = 0; i < tasks.size(); i++) {
+                lines[i] = (i + 1) + ". " + tasks.get(i);
+            }
+            printBox(lines);
+        }
+    }
+
+    private static void handleMarking(ArrayList <Task> tasks, String input) {
+        boolean isMark = input.startsWith("mark ");
+        int index = Integer.parseInt(input.split("\\s+")[1]);
+        Task t = tasks.get(index - 1);
+        if(isMark) {
+            t.mark();
+            printBox("I've mark this task as done:", " " + t.toString());
+        } else {
+            t.unmark();
+            printBox("I've mark this task as not done yet:", " " + t.toString());
+        }
+    }
+
+    public static void handleAdd(ArrayList<Task> tasks, String input) {
+        Task t = Parser.parseAddCommand(input);
+        tasks.add(t);
+        String kind = t instanceof Todo ? "task"
+                : t instanceof Deadline ? "deadline"
+                : "event";
+        printBox("Got it. I've add this " + kind + ":", " " + t.toString(), "Now you have " + tasks.size() + " tasks in the list.");
     }
 }
