@@ -1,3 +1,10 @@
+import exception.InvalidCommandException;
+import exception.StarouException;
+import task.Deadline;
+import task.Parser;
+import task.Task;
+import task.Todo;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -31,32 +38,48 @@ public class Starou {
         //Infinite loop until inputting "bye"
         while (true) {
             String input = sc.nextLine().trim();
+            //catch error
+            try {
+                //enter "bye" to exit the chat
+                if(input.equals("bye")) {
+                    printBox("Bye! Tam biet!!");
+                    break;
+                }
+                //List of all tasks
+                else if (input.equals("list")) { //list of all tasks
+                    handleList(tasks);
+                }
 
-            //enter "bye" to exit the chat
-            if(input.equals("bye")) {
-                printBox("Bye! Tam biet!!");
-                break;
-            }
-            //List of all tasks
-            else if (input.equals("list")) { //list of all tasks
-                handleList(tasks);
+                //Mark/ Unmark
+                else if (input.startsWith("mark") || input.startsWith("unmark")) {
+                    handleMarking(tasks, input);
+                }
+
+                else if (Parser.isAddCommand(input)) {
+                    handleAdd(tasks, input);
+                }
+
+                //throw error: empty input
+                else if (input.isEmpty()) {
+                    throw new InvalidCommandException("Please enter a valid command!");
+                }
+
+                //Error: unknown format
+                else {
+                    throw new InvalidCommandException(
+                            "Unknown command. Try: list, todo, deadline, event, mark, unmark, bye.");
+                }
+            } catch (StarouException e) {
+                printBox(e.getMessage());
+            } catch (IndexOutOfBoundsException e) {
+                printBox("Invalid task index! Please enter number between 1 and " + tasks.size() + "!");
+            } catch (NumberFormatException e) {
+                printBox("Task index must be a positive interger!");
+            } catch(Exception e) {
+                printBox("Unknown error! " + e.getMessage());
             }
 
-            //Mark/ Unmark
-            else if (input.startsWith("mark ") || input.startsWith("unmark ")) {
-                handleMarking(tasks, input);
-            }
 
-            else if (Parser.isAddCommand(input)) {
-                handleAdd(tasks, input);
-            }
-
-            //Keep old behavior
-            else {
-                Task t = new Todo(input);
-                tasks.add(t);
-                printBox("added: " + input);
-            }
         }
 
         sc.close();
@@ -76,7 +99,17 @@ public class Starou {
 
     private static void handleMarking(ArrayList <Task> tasks, String input) {
         boolean isMark = input.startsWith("mark ");
-        int index = Integer.parseInt(input.split("\\s+")[1]);
+        String[] parts = input.split("\\s+");
+
+        //error: didn't enter task index
+        if(parts.length < 2) {
+            throw new InvalidCommandException("Command lacks task index!");
+        }
+        int index = Integer.parseInt(parts[1]);
+        if(index <= 0 || index > tasks.size()) {
+            throw new InvalidCommandException("Index must be between 1 and " + tasks.size() + "!");
+        }
+
         Task t = tasks.get(index - 1);
         if(isMark) {
             t.mark();
