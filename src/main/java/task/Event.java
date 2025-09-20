@@ -19,4 +19,9 @@ public class Event extends Task {
     protected String extraInfo() {
         return "(from: "  + from + " to: " + to + ")";
     }
+
+    @Override
+    public String toStorageString() {
+        return String.format("E | %d | %s | %s | %s", isDone ? 1 : 0, description, from, to);
+    }
 }

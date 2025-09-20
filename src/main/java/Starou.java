@@ -25,7 +25,7 @@ public class Starou {
                 "   _____ _                        \n"
                         + "  / ____| |                       \n"
                         + " | (___ | |_ __ _ _ __ ___  _   _ \n"
-                        + "  \\___ \\| __/ _` | '__/ _ \\| | | |\n"
+                          + "  \\___ \\| __/ _` | '__/ _ \\| | | |\n"
                         + "  ____) | || (_| | | | (_) | |_| |\n"
                         + " |_____/ \\__\\__,_|_|  \\___/ \\__,_|\n";
         System.out.println("Hello from\n" + logo);
@@ -55,6 +55,10 @@ public class Starou {
                     handleMarking(tasks, input);
                 }
 
+                else if (input.startsWith("delete")) {
+                    handleDelete(tasks, input);
+                }
+
                 else if (Parser.isAddCommand(input)) {
                     handleAdd(tasks, input);
                 }
@@ -67,7 +71,7 @@ public class Starou {
                 //Error: unknown format
                 else {
                     throw new InvalidCommandException(
-                            "Unknown command. Try: list, todo, deadline, event, mark, unmark, bye.");
+                            "Unknown command. Try: list, todo, deadline, event, mark, unmark, delete bye.");
                 }
             } catch (StarouException e) {
                 printBox(e.getMessage());
@@ -127,5 +131,21 @@ public class Starou {
                 : t instanceof Deadline ? "deadline"
                 : "event";
         printBox("Got it. I've add this " + kind + ":", " " + t.toString(), "Now you have " + tasks.size() + " tasks in the list.");
+    }
+
+    //Level 6: delete <index>
+    private static void handleDelete(ArrayList<Task> tasks, String input) {
+        String[] parts = input.split("\\s+");
+        if (parts.length < 2) throw new InvalidCommandException("Command lacks task index!");
+
+        int index = Integer.parseInt(parts[1]);
+        if(index <= 0 || index > tasks.size()) {
+            throw new InvalidCommandException("Index must be between 1 and " + tasks.size() + "!");
+        }
+
+        Task removed = tasks.remove(index - 1);
+        printBox("Noted. I've removed this task:",
+                "  " + removed.toString(),
+                "Now you have " + tasks.size() + " tasks in the list.");
     }
 }
