@@ -25,6 +25,9 @@ public abstract class Task {
 
     protected String extraInfo() { return "";}
 
+    //This is for Level-7
+    public abstract String toStorageString();
+
     @Override
     public String toString() {
         String base = String.format("[%s][%s] %s", getTypeIcon(), getStatusIcon(), description);

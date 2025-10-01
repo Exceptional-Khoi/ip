@@ -17,4 +17,9 @@ public class Deadline extends Task {
     protected String extraInfo() {
         return "(by: " + by + ")";
     }
+
+    @Override
+    public String toStorageString() {
+        return String.format("D | %d | %s | %s", isDone ? 1 : 0, description, by);
+    }
 }
