@@ -1,5 +1,6 @@
 package storage;
 
+import task.Deadline;
 import task.Event;
 import task.Task;
 import task.Todo;
@@ -39,7 +40,7 @@ public class Storage {
         return list;
     }
 
-    /** Parse 1 line following the format:
+    /* Parse 1 line following the format:
      *  T | 1 | desc
      *  D | 0 | desc | by
      *  E | 1 | desc | from | to
@@ -59,10 +60,10 @@ public class Storage {
                     return t;
                 }
                 case 'D': {
-                    if(parts.length < 5) return null;
-                    Event e = new Event(parts[2], parts[3], parts[4]);
-                    if (done) e.mark();
-                    return e;
+                    if(parts.length < 4) return null;
+                    Deadline d = new Deadline(parts[2], parts[3]);
+                    if (done) d.mark();
+                    return d;
                 }
                 case 'E' : {
                     if(parts.length < 5) return null;

@@ -1,5 +1,6 @@
 import exception.InvalidCommandException;
 import exception.StarouException;
+import storage.Storage;
 import task.Deadline;
 import task.Parser;
 import task.Task;
@@ -31,8 +32,11 @@ public class Starou {
         System.out.println("Hello from\n" + logo);
         printBox("Hello! I'm Starou from Vietnam", "What can I do for you?");
 
+        //Create Storage
+        Storage storage = new Storage("./data/Starou.txt");
+
         // Create a list for task
-        ArrayList<Task> tasks = new ArrayList<>();
+        ArrayList<Task> tasks = storage.load();
         Scanner sc = new Scanner(System.in);
 
         //Infinite loop until inputting "bye"
@@ -53,14 +57,17 @@ public class Starou {
                 //Mark/ Unmark
                 else if (input.startsWith("mark") || input.startsWith("unmark")) {
                     handleMarking(tasks, input);
+                    storage.save(tasks);
                 }
 
                 else if (input.startsWith("delete")) {
                     handleDelete(tasks, input);
+                    storage.save(tasks);
                 }
 
                 else if (Parser.isAddCommand(input)) {
                     handleAdd(tasks, input);
+                    storage.save(tasks);
                 }
 
                 //throw error: empty input
