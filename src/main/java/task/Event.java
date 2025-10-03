@@ -26,6 +26,6 @@ public class Event extends Task {
 
     @Override
     public String toStorageString() {
-        return String.format("E | %d | %s | %s | %s", isDone ? 1 : 0, description, from.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm")), to.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm")));
+        return String.format("E | %d | %s | %s | %s", isDone ? 1 : 0, description, from.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")), to.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
     }
 }

@@ -67,6 +67,19 @@
                         storage.save(tasks);
                     }
 
+                    //Level 9: find
+                    else if (input.startsWith("find")) {
+                        String keyword = Parser.parseFindCommand(input);
+                        System.out.println("Here are the matching tasks in your list:");
+                        int index = 1;
+                        for(Task t : tasks) {
+                            if(t.description.toLowerCase().contains(keyword.toLowerCase())) {
+                                System.out.println(index + ". " + t);
+                            }
+                            index++;
+                        }
+                    }
+
                     else if (Parser.isAddCommand(input)) {
                         handleAdd(tasks, input);
                         storage.save(tasks);

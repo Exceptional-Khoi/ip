@@ -81,10 +81,24 @@ public class Parser {
         LocalDateTime to = LocalDateTime.parse(parts[2].trim(), formatter);
 
         if (desc.isEmpty()) {
-            throw new InvalidCommandException("Please enter a description !");
+            throw new InvalidCommandException("Please enter a description!");
         }
 
         return new Event(desc, from, to);
     }
+
+    public static String parseFindCommand(String input) {
+        if (input == null || input.trim().isEmpty()) {
+            throw new InvalidCommandException("Please enter a valid keyword!");
+        }
+
+        String keyword = input.substring("find".length()).trim();
+        if (keyword.isEmpty()) {
+            throw new InvalidCommandException("Please enter a keyword after 'find'!");
+        }
+
+        return keyword;
+    }
+
 
 }
