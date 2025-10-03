@@ -34,7 +34,7 @@
             System.out.println("Hello from\n" + logo);
             printBox("Hello! I'm Starou from Vietnam", "What can I do for you?");
 
-            //Create Storage
+            //Level 7: Create Storage
             Storage storage = new Storage("./data/Starou.txt");
 
             // Create a list for task

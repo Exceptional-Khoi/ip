@@ -1,13 +1,16 @@
 package task;
 
-public class Event extends Task {
-    private final String from;
-    private final String to;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-    public Event(String description, String from, String to) {
+public class Event extends Task {
+    private final LocalDateTime from;
+    private final LocalDateTime to;
+
+    public Event(String description, LocalDateTime from, LocalDateTime to) {
         super(description);
-        this.from = from.trim();
-        this.to = to.trim();
+        this.from = from;
+        this.to = to;
     }
 
     @Override
@@ -17,11 +20,12 @@ public class Event extends Task {
 
     @Override
     protected String extraInfo() {
-        return "(from: "  + from + " to: " + to + ")";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy, h:mma");
+        return String.format("(from: %s to %s)", from.format(formatter), to.format(formatter));
     }
 
     @Override
     public String toStorageString() {
-        return String.format("E | %d | %s | %s | %s", isDone ? 1 : 0, description, from, to);
+        return String.format("E | %d | %s | %s | %s", isDone ? 1 : 0, description, from.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm")), to.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm")));
     }
 }

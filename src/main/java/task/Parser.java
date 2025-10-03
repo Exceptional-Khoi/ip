@@ -1,7 +1,11 @@
 package task;
 import exception.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Parser {
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     //return true if input start with todo, deadline, event
     public static boolean isAddCommand(String input) {
@@ -52,7 +56,7 @@ public class Parser {
         }
 
         String desc = parts[0].trim();
-        String by = parts[1].trim();
+        LocalDateTime by = LocalDateTime.parse(parts[1].trim(), formatter);
 
         if (desc.isEmpty()) {
             throw new InvalidCommandException("Deadline description cannot be empty.");
@@ -71,21 +75,13 @@ public class Parser {
             throw new InvalidCommandException("Event needs '/from ... /to ...' !");
         }
 
-        String[] parts1 = rest.split("/from", 2);
-        String desc = parts1[0].trim();
-
-        String[] parts2 = parts1[1].split("/to", 2);
-        String from = parts2[0].trim();
-        String to = (parts2.length > 1) ? parts2[1].trim() : "";
+        String[] parts = rest.split("/from|/to");
+        String desc = parts[0].replaceFirst("event", "").trim();
+        LocalDateTime from = LocalDateTime.parse(parts[1].trim(), formatter);
+        LocalDateTime to = LocalDateTime.parse(parts[2].trim(), formatter);
 
         if (desc.isEmpty()) {
             throw new InvalidCommandException("Please enter a description !");
-        }
-        if (from.isEmpty()) {
-            throw new InvalidCommandException("Please enter a value after '/from'!");
-        }
-        if (to.isEmpty()) {
-            throw new InvalidCommandException("Please enter a value after '/to'!");
         }
 
         return new Event(desc, from, to);

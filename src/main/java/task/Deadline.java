@@ -1,11 +1,14 @@
 package task;
 
-public class Deadline extends Task {
-    private final String by;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-    public Deadline(String description, String by) {
+public class Deadline extends Task {
+    protected LocalDateTime by;
+
+    public Deadline(String description, LocalDateTime by) {
         super(description);
-        this.by = by.trim();
+        this.by = by;
     }
 
     @Override
@@ -15,11 +18,12 @@ public class Deadline extends Task {
 
     @Override
     protected String extraInfo() {
-        return "(by: " + by + ")";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy, h:mma");
+        return "(by: " + by.format(formatter) + ")";
     }
 
     @Override
     public String toStorageString() {
-        return String.format("D | %d | %s | %s", isDone ? 1 : 0, description, by);
+        return String.format("D | %d | %s | %s", isDone ? 1 : 0, description, by.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm")));
     }
 }

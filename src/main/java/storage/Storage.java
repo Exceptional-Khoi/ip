@@ -11,11 +11,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Storage {
     private final Path filePath;
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy, h:mma");
 
     public Storage(String relativePath) {
         this.filePath = Paths.get(relativePath);
@@ -61,13 +64,18 @@ public class Storage {
                 }
                 case 'D': {
                     if(parts.length < 4) return null;
-                    Deadline d = new Deadline(parts[2], parts[3]);
+                    LocalDateTime by = LocalDateTime.parse(parts[3].trim(), formatter);
+
+                    Deadline d = new Deadline(parts[2], by);
                     if (done) d.mark();
                     return d;
                 }
                 case 'E' : {
                     if(parts.length < 5) return null;
-                    Event e = new Event(parts[2], parts[3], parts[4]);
+                    LocalDateTime from = LocalDateTime.parse(parts[4].trim(), formatter);
+                    LocalDateTime to = LocalDateTime.parse(parts[5].trim(), formatter);
+
+                    Event e = new Event(parts[2], from, to);
                     if (done) e.mark();
                     return e;
                 }
