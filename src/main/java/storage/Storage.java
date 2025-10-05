@@ -16,15 +16,44 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles reading and writing of {@link Task} data to and from a persistent text file.
+ * <p>
+ * The {@code Storage} class allows the Starou application to save user tasks
+ * and restore them in future sessions. Tasks are serialized in a simple
+ * human-readable pipe-separated format.
+ * </p>
+ *
+ * <p><b>Example format:</b></p>
+ * <pre>
+ * T | 1 | Read book
+ * D | 0 | Submit report | 2025-10-12 23:59
+ * E | 1 | Conference | 2025-10-14 09:00 | 2025-10-14 17:00
+ * </pre>
+ */
 public class Storage {
     private final Path filePath;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
+    /**
+     * Constructs a new {@code Storage} object for managing task data at the specified path.
+     *
+     * @param relativePath the relative file path (e.g., {@code "./data/Starou.txt"})
+     */
     public Storage(String relativePath) {
         this.filePath = Paths.get(relativePath);
     }
 
-    //Load tasks from file. If file doesn't exist -> return empty list
+    /**
+     * Loads tasks from the save file.
+     * <p>
+     * If the file does not exist or is empty, an empty list is returned.
+     * Each line in the file is parsed into a corresponding {@link Task}
+     * instance such as {@link Todo}, {@link Deadline}, or {@link Event}.
+     * </p>
+     *
+     * @return a list of tasks loaded from the file (never {@code null})
+     */
     public ArrayList<Task> load() {
         ArrayList<Task> list = new ArrayList<>();
         if(!Files.exists(filePath)) return list;
@@ -43,10 +72,20 @@ public class Storage {
         return list;
     }
 
-    /* Parse 1 line following the format:
-     *  T | 1 | desc
-     *  D | 0 | desc | by
-     *  E | 1 | desc | from | to
+    /**
+     * Parses a single line of task data from the save file into a {@link Task} object.
+     * <p>
+     * The expected format for each task is:
+     * <ul>
+     *     <li>{@code T | 1 | description}</li>
+     *     <li>{@code D | 0 | description | by}</li>
+     *     <li>{@code E | 1 | description | from | to}</li>
+     * </ul>
+     * </p>
+     * Lines that do not match these formats are ignored.
+     *
+     * @param line a single line from the save file
+     * @return the parsed {@link Task}, or {@code null} if the line is invalid or corrupted
      */
     private Task parseLine(String line) {
         try {
@@ -89,7 +128,17 @@ public class Storage {
         }
     }
 
-    //Write on files from current tasks
+    /**
+     * Saves the provided list of tasks to the save file.
+     * <p>
+     * The file will be created if it does not exist, and any existing content
+     * will be overwritten. Each task is serialized using its
+     * {@link Task#toStorageString()} method.
+     * </p>
+     *
+     * @param tasks the list of tasks to save
+     * @throws RuntimeException if an I/O error occurs while writing to the file
+     */
     public void save(List<Task> tasks) {
         try {
             if(filePath.getParent() != null) {
