@@ -135,6 +135,7 @@ Bye! Tam biet!!
 
 ---
 ## Quick Command Summary
+
 | Command | Description | Example |
 |----------|--------------|----------|
 | `todo <description>` | Adds a simple task without a deadline. | `todo read book` |
