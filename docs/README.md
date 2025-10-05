@@ -10,7 +10,8 @@ All tasks are automatically saved to a local file so you can pick up where you l
 ## Adding deadlines
 You can add a **Deadline task** to keep track of something that must be done before a specific date/time.
 ### **Usage**
-`deadline <description> /by <yyyy-MM-dd HH:mm>`
+`deadline <description> /by <time>`
+with time format: `yyyy-MM-dd HH:mm`
 
 Example: `deadline submit report /by 2025-10-10 23:59`
 
@@ -37,7 +38,8 @@ Now you have 4 tasks in the list.
 ## Adding Events
 An Event has a start and end time — for example, a meeting or a conference.
 ### **Usage**
-`event <description> /from <yyyy-MM-dd HH:mm> /to <yyyy-MM-dd HH:mm>`
+`event <description> /from <start time> /to <end time>` 
+with start time and end time following the format: `yyyy-MM-dd HH:mm`
 
 Example: `event project meeting /from 2025-10-12 14:00 /to 2025-10-12 16:00`
 
@@ -94,7 +96,7 @@ Now you have 4 tasks in the list.
 ## Finding Tasks
 Find tasks that contain a keyword in their description.
 ### **Usage**
-`find <keywork>`
+`find <keyword>`
 
 Example: `find report`
 
@@ -115,7 +117,7 @@ D | 0 | Submit report | 2025-10-10 23:59
 E | 1 | Team meeting | 2025-10-12 14:00 | 2025-10-12 16:00
 ```
 
-## Existing the Program
+## Exiting the Program
 Type: `bye`
 
 Starou will say goodbye and exit gracefully:
@@ -136,21 +138,21 @@ Bye! Tam biet!!
 ---
 ## Quick Command Summary
 
-| Command | Description | Example |
-|----------|--------------|----------|
-| `todo <description>` | Adds a simple task without a deadline. | `todo read book` |
-| `deadline <description> /by <yyyy-MM-dd HH:mm>` | Adds a task with a specific deadline. | `deadline submit report /by 2025-10-10 23:59` |
-| `event <description> /from <yyyy-MM-dd HH:mm> /to <yyyy-MM-dd HH:mm>` | Adds an event with start and end times. | `event project meeting /from 2025-10-12 14:00 /to 2025-10-12 16:00` |
-| `list` | Displays all tasks in your list. | `list` |
-| `mark <index>` | Marks the specified task as completed. | `mark 2` |
-| `unmark <index>` | Marks the specified task as not completed. | `unmark 2` |
-| `delete <index>` | Deletes the specified task from the list. | `delete 3` |
-| `find <keyword>` | Searches for tasks that contain the given keyword. | `find meeting` |
-| `bye` | Exits the program gracefully. | `bye` |
+| Command                                                 | Description | Example |
+|---------------------------------------------------------|--------------|----------|
+| `todo <description>`                                    | Adds a simple task without a deadline. | `todo read book` |
+| `deadline <description> /by <time>`                     | Adds a task with a specific deadline. | `deadline submit report /by 2025-10-10 23:59` |
+| `event <description> /from <start time> /to <end time>` | Adds an event with start and end times. | `event project meeting /from 2025-10-12 14:00 /to 2025-10-12 16:00` |
+| `list`                                                  | Displays all tasks in your list. | `list` |
+| `mark <index>`                                          | Marks the specified task as completed. | `mark 2` |
+| `unmark <index>`                                        | Marks the specified task as not completed. | `unmark 2` |
+| `delete <index>`                                        | Deletes the specified task from the list. | `delete 3` |
+| `find <keyword>`                                        | Searches for tasks that contain the given keyword. | `find meeting` |
+| `bye`                                                   | Exits the program gracefully. | `bye` |
 
 ---
 ## Tips
-- Make sure your date and time follow the format: `yyyy-MM-dd HH:mm`  
+- Make sure your time follow the format: `yyyy-MM-dd HH:mm`  
   → Example: `2025-10-10 23:59`
 - Use lowercase commands (`todo`, `deadline`, etc.) — commands are case-sensitive.
 - Tasks are automatically saved in `data/Starou.txt`.
